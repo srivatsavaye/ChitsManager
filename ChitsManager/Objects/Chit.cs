@@ -14,7 +14,8 @@ namespace ChitsManager.Objects
         private int _numberOfCustomers;
         private string _monthStarted;
         private int _multiplier;
-
+        private bool _activeFlag;
+       
         public int ChitId
         {
             get { return _chitId; }
@@ -49,6 +50,17 @@ namespace ChitsManager.Objects
         {
             get { return _multiplier; }
             set { _multiplier = value; }
+        }
+
+        public bool ActiveFlag
+        {
+            get { return _activeFlag; }
+            set { _activeFlag = value; }
+        }
+
+        public override string ToString()
+        {
+            return ChitId.ToString() + " - " + ChitName;
         }
         
     }

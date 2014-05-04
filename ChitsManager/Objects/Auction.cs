@@ -17,7 +17,7 @@ namespace ChitsManager.Objects
         private int _auctionAmount;
         private bool _isDirty;
 
-        public int AuctionId
+               public int AuctionId
         {
             get { return _auctionId; }
             set { _auctionId = value; }
@@ -57,6 +57,12 @@ namespace ChitsManager.Objects
         {
             get { return _auctionAmount; }
             set { _auctionAmount = value; }
+        }
+
+        public bool IsDirty
+        {
+            get { return _isDirty; }
+            set { _isDirty = value; }
         }
     }
 }

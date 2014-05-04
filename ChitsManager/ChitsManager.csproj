@@ -73,10 +73,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="MainWindowModelView.cs" />
     <Compile Include="Objects\Auction.cs" />
     <Compile Include="Objects\Chit.cs" />
     <Compile Include="Objects\Customer.cs" />
+    <Compile Include="Objects\Utilities.cs" />
     <Compile Include="Objects\Payment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

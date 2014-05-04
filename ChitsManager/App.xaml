@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              StartupUri="MainWindow.xaml"
              xmlns:local="clr-namespace:ChitsManager">
-    <Application.Resources>
+    <!--<Application.Resources>
         <local:MainWindowModelView x:Key="MainWindowModelView" />
-    </Application.Resources>
+    </Application.Resources>-->
 </Application>

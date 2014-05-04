@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using ChitsManager.Objects;
+using ChitsManager.DataAccess;
 
 namespace ChitsManager
 {
@@ -11,10 +12,10 @@ namespace ChitsManager
     {
         private Dictionary<Chit, List<Auction>> _dicAuctions = new Dictionary<Chit, List<Auction>>();
         private Chit _selectedChit;
-        
+
         public MainWindowModelView()
         {
-            _dicAuctions = DataAccess.DataConversion.ConvertAuctionData();
+            _dicAuctions = DataConversion.ConvertAuctionData();
         }
 
         public List<Auction> Auctions
@@ -28,7 +29,7 @@ namespace ChitsManager
             }
             set
             {
-                if(value != null)
+                if (value != null)
                 {
                     var savedAuctions = value;
                 }
@@ -59,7 +60,5 @@ namespace ChitsManager
                 return _dicAuctions.Select(c => c.Key).Distinct().ToList();
             }
         }
-
-
     }
 }
