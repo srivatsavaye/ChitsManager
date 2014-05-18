@@ -100,6 +100,42 @@
                 </Grid>
             </Grid>
         </TabItem>
+        <TabItem Name="tiCustomers" Header="Customers">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row ="0" Grid.Column="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="103*"/>
+                        <ColumnDefinition Width="297*"/>
+                        <ColumnDefinition Width="402*"/>
+                    </Grid.ColumnDefinitions>
+                    <DataGrid Name="dgCustomers" Height="600" Width="800" RowHeight="20" 
+                              ItemsSource="{Binding Customers, Mode=TwoWay}" 
+                              AutoGenerateColumns="true" 
+                              CanUserResizeRows="False" 
+                              AlternationCount="1" 
+                              AlternatingRowBackground="#FFB0A3A3" 
+                              Grid.ColumnSpan="3" 
+                              Margin="0,0,2,2" 
+                              CanUserReorderColumns="False" 
+                              CanUserResizeColumns="False" 
+                              Loaded="dgCustomers_Loaded" 
+                              >
+                        <!--<DataGrid.Columns>
+                            <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="0.5*"/>
+                            <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="0.2*" />
+                            <DataGridTextColumn Header="Auction Amount" Binding="{Binding AuctionAmount}" Width="0.3*" />
+                        </DataGrid.Columns>-->
+
+                    </DataGrid>
+                </Grid>
+            </Grid>
+        </TabItem>
     </TabControl>
 
 </Window>

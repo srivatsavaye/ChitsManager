@@ -142,5 +142,54 @@ namespace ChitsManager.DataAccess
             }
             return listPayments;
         }
+
+        public static List<Customer> ConvertCustomerData(int customerId = 0)
+        {
+            List<Customer> listCustomers = new List<Customer>(); 
+            DataSet ds = _dataController.GetCustomers(customerId);            
+            if (ds != null)
+            {
+                if (ds.Tables[0].Rows.Count > 0)
+                {
+                    foreach (DataRow dr in ds.Tables[0].Rows)
+                    {
+                        int customerId1;
+                        bool activeFlag;
+                        int.TryParse(dr["CustomerId"].ToString(), out customerId1);
+                        bool.TryParse(dr["ActiveFlag"].ToString(), out activeFlag);
+
+                        Customer customer = new Customer();
+                        customer.CustomerId = customerId1;
+                        customer.CustomerName = dr["CustomerName"].ToString();
+                        customer.Address = dr["Address"].ToString();
+                        customer.City = dr["City"].ToString();
+                        customer.HomePhone= dr["HomePhone"].ToString();
+                        customer.CellPhone = dr["CellPhone"].ToString();
+                        customer.ActiveFlag = activeFlag;
+
+                        listCustomers.Add(customer);
+                    }
+                }
+            }
+            return listCustomers;
+        }
+
+        public static bool UpsertCustomers(List<Customer> listCustomers)
+        {
+            bool ret = false;
+            DataController controller = new DataController();
+            foreach(Customer customer in listCustomers)
+            {
+                if(customer.IsDirty)
+                {
+                    if (customer.CustomerId == 0)
+                        controller.InsertCustomer(customer);
+                    else
+                        controller.UpdateCustomer(customer);
+                    
+                }
+            }
+            return ret;
+        }
     }
 }

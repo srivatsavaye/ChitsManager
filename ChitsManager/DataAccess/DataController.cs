@@ -7,6 +7,7 @@ using System.Configuration;
 using System.Data;
 using System.Data.SqlClient;
 using GlobalDataAccess;
+using ChitsManager.Objects;
 
 namespace ChitsManager.DataAccess
 {
@@ -69,13 +70,12 @@ namespace ChitsManager.DataAccess
             return ds;
         }
 
-
         public DataSet GetChits()
         {
             DataSet ds = new DataSet();
             try
             {
-                List<SqlParameter> paramList = new List<SqlParameter>();             
+                List<SqlParameter> paramList = new List<SqlParameter>();
                 if (!_adoDataAccess.ExecuteStoredProc(ds, "sp_GetChits", paramList))
                 {
                     throw new Exception("GetChits Could not return Data");
@@ -88,7 +88,6 @@ namespace ChitsManager.DataAccess
 
             return ds;
         }
-
 
         public bool UpdateAuctionByAuctionId(int auctionId, int month, int auctionAmount)
         {
@@ -109,6 +108,84 @@ namespace ChitsManager.DataAccess
                 throw new Exception("UpdateAuctionByAuctionId method failed", ex);
             }
 
+            return ret;
+        }
+
+        public DataSet GetCustomers(int customerId = 0)
+        {
+            DataSet ds = new DataSet();
+            try
+            {
+                List<SqlParameter> paramList = new List<SqlParameter>();
+                if (customerId != 0)
+                {
+                    paramList.Add(new SqlParameter("@CustomerId", customerId));
+                }
+                if (!_adoDataAccess.ExecuteStoredProc(ds, "sp_GetCustomers", paramList))
+                {
+                    throw new Exception("GetCustomers did not return Data");
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("GetCustomers method failed", ex);
+            }
+
+            return ds;
+        }
+
+        public bool UpdateCustomer(Customer customer)
+        {
+            bool ret = false;
+
+            try
+            {
+                List<SqlParameter> paramList = new List<SqlParameter>();
+                paramList.Add(new SqlParameter("@CustomerId", customer.CustomerId));
+                paramList.Add(new SqlParameter("@CustomerName", customer.CustomerName));
+                paramList.Add(new SqlParameter("@Address", customer.Address));
+                paramList.Add(new SqlParameter("@City", customer.City));
+                paramList.Add(new SqlParameter("@HomePhone", customer.HomePhone));
+                paramList.Add(new SqlParameter("@CellPhone", customer.CellPhone));
+                paramList.Add(new SqlParameter("@ActiveFlag", customer.ActiveFlag));
+
+                if (!_adoDataAccess.ExecuteNonQuery("sp_UpdateCustomer", paramList))
+                    throw new Exception("UpdateCustomer could not run");
+                else
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("UpdateCustomer method failed", ex);
+            }
+
+
+
+            return ret;
+        }
+
+        public bool InsertCustomer(Customer customer)
+        {
+            bool ret = false;
+
+            try
+            {
+                List<SqlParameter> paramList = new List<SqlParameter>();
+                paramList.Add(new SqlParameter("@CustomerName", customer.CustomerName));
+                paramList.Add(new SqlParameter("@Address", customer.Address));
+                paramList.Add(new SqlParameter("@City", customer.City));
+                paramList.Add(new SqlParameter("@HomePhone", customer.HomePhone));
+                paramList.Add(new SqlParameter("@CellPhone", customer.CellPhone));
+
+                if (!_adoDataAccess.ExecuteNonQuery("sp_InsertCustomer", paramList))
+                    throw new Exception("UpdateCustomer could not run");
+                else
+                    return true;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("UpdateCustomer method failed", ex);
+            }
             return ret;
         }
     }

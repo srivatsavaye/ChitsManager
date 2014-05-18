@@ -223,7 +223,7 @@ namespace ChitsManager
 
         private void dgAuctions_Loaded(object sender, RoutedEventArgs e)
         {
-            SetGridColumnProperties();
+            dgAuctions_SetGridColumnProperties();
         }
 
         private void dgAuctions_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
@@ -278,7 +278,7 @@ namespace ChitsManager
 
         #region Appearance
 
-        private void SetGridColumnProperties()
+        private void dgAuctions_SetGridColumnProperties()
         {
             dgAuctions.Columns[_auctionIdColumnNumber].Visibility = Visibility.Hidden;
             dgAuctions.Columns[_customeridColumnNumber].Visibility = Visibility.Hidden;
@@ -375,8 +375,7 @@ namespace ChitsManager
 
         #endregion
 
-        #endregion
-
+        #region Event Handlers
 
         private void dgPayments_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
@@ -392,6 +391,71 @@ namespace ChitsManager
         {
 
         }
+
+        #endregion
+
+        #endregion
+
+        #region Customers
+
+        #region Properties
+
+        private List<Customer> _customers;
+
+        public List<Customer> Customers
+        {
+            get { return DataConversion.ConvertCustomerData(0); }
+            set { _customers = value; }
+        }
+
+        #endregion
+
+        #region Constants
+
+        private const int _customerIdColumnNumber = 0;
+        private const int _customerNameCustomerColumnNumber = 1;
+        private const int _addressColumnNumber = 2;
+        private const int _cityColumnNumber = 3;
+        private const int _homePhoneColumnNumber = 4;
+        private const int _cellPhoneColumnNumber = 5;
+        private const int _activeFlagColumnNumber = 6;
+        private const int _isDirtyCustomerColumnNumber = 7;
+
+
+        #endregion
+
+        #region Appearance
+
+        private void dgCustomers_SetGridColumnProperties()
+        {
+            dgCustomers.Columns[_customerIdColumnNumber].Visibility = Visibility.Hidden;
+            dgCustomers.Columns[_isDirtyCustomerColumnNumber].Visibility = Visibility.Hidden; 
+            //dgAuctions.Columns[_monthColumnNumber].IsReadOnly = true;
+            double gridWidth = dgCustomers.Width - 8;
+
+            dgCustomers.Columns[_customerNameCustomerColumnNumber].Width = gridWidth * 0.3;
+            dgCustomers.Columns[_addressColumnNumber].Width = gridWidth * 0.3;
+            dgCustomers.Columns[_cityColumnNumber].Width = gridWidth * 0.1;
+            dgCustomers.Columns[_homePhoneColumnNumber].Width = gridWidth * 0.1;
+            dgCustomers.Columns[_cellPhoneColumnNumber].Width = gridWidth * 0.1;
+            dgCustomers.Columns[_activeFlagColumnNumber].Width = gridWidth * 0.1;
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+        private void dgCustomers_Loaded(object sender, RoutedEventArgs e)
+        {
+            dgCustomers_SetGridColumnProperties();
+        }
+
+        #endregion
+
+        #endregion
+
+
+
 
     }
 }

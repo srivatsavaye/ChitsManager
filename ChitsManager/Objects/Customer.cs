@@ -14,6 +14,8 @@ namespace ChitsManager.Objects
         private string _city;
         private string _homePhone;
         private string _cellPhone;
+        private bool _activeFlag;
+        private bool _isDirty;
 
         public int CustomerId
         {
@@ -49,6 +51,18 @@ namespace ChitsManager.Objects
         {
             get { return _cellPhone; }
             set { _cellPhone = value; }
+        }
+
+        public bool ActiveFlag
+        {
+            get { return _activeFlag; }
+            set { _activeFlag = value; }
+        }
+
+        public bool IsDirty
+        {
+            get { return _isDirty; }
+            set { _isDirty = value; }
         }
     }
 }
