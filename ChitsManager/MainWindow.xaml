@@ -4,43 +4,86 @@
         Title="MainWindow" Height="800" Width="900"
         DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <!--DataContext="{StaticResource MainWindowModelView}">-->
-    <TabControl>
-        <TabItem Name="tiPayments" Header="Payments">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Left">
-                    <ComboBox Name="cbPaymentChits" Width="150" 
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="40"></RowDefinition>
+            <RowDefinition Height="Auto"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Left">
+            <Button Name="btnSave" Click="btnSave_Click" Content="Save" Width="300">
+                <Button.Effect>
+                    <DropShadowEffect/>
+                </Button.Effect>
+            </Button>
+        </Grid>
+        <Grid Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Left">
+            <TabControl>
+                <TabItem Name="tiAllPayments" Header="All Payments">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row ="0" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="103*"/>
+                                <ColumnDefinition Width="297*"/>
+                                <ColumnDefinition Width="402*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="dgAllPayments" Height="600" Width="800" RowHeight="20" 
+                              ItemsSource="{Binding AllPayments, Mode=TwoWay}" 
+                              AutoGenerateColumns="true" 
+                              CanUserDeleteRows="False" 
+                              CanUserResizeRows="False" 
+                              AlternationCount="1" 
+                              AlternatingRowBackground="#FFB0A3A3" 
+                              CanUserAddRows="False" Grid.ColumnSpan="3" Margin="0,0,2,2" Loaded="dgAllPayments_Loaded" CellEditEnding="dgAllPayments_CellEditEnding" >
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="tiPayments" Header="Payments">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="97" />
+                            <ColumnDefinition Width="706"/>
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                            <ComboBox Name="cbPaymentChits" Width="150" 
                               ItemsSource="{Binding PaymentChits}" 
                               SelectedItem="{Binding PaymentSelectedChit}" 
                               DisplayMemberPath="ChitName" 
                               SelectedValuePath="ChitId">
-                    </ComboBox>
-                    <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
-                </Grid>
-                <Grid Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Left">
-                    <ComboBox Name="cbPaymentMonths" Width="150" 
+                            </ComboBox>
+                            <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
+                        </Grid>
+                        <Grid Grid.Row ="1" Grid.Column="0" HorizontalAlignment="Left" Grid.ColumnSpan="2">
+                            <ComboBox Name="cbPaymentMonths" Width="150" 
                               ItemsSource="{Binding Months}" 
                               SelectedItem="{Binding SelectedMonth}" >
-                              <!--DisplayMemberPath="Month" 
+                                <!--DisplayMemberPath="Month" 
                               SelectedValuePath="Month">-->
-                    </ComboBox>
-                    <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
-                </Grid>
-                <Grid Grid.Row ="2" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="103*"/>
-                        <ColumnDefinition Width="297*"/>
-                        <ColumnDefinition Width="402*"/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid Name="dgPayments" Height="600" Width="800" RowHeight="20" 
-                              ItemsSource="{Binding MonthlyPayments}" 
+                            </ComboBox>
+                            <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
+                        </Grid>
+                        <Grid Grid.Row ="2" Grid.Column="0" Grid.ColumnSpan="2">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="103*"/>
+                                <ColumnDefinition Width="297*"/>
+                                <ColumnDefinition Width="402*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="dgPayments" Height="600" Width="800" RowHeight="20" 
+                              ItemsSource="{Binding MonthlyPayments, Mode=TwoWay}" 
                               AutoGenerateColumns="true" 
                               CanUserDeleteRows="False" 
                               CanUserResizeRows="False" 
@@ -50,35 +93,34 @@
                               CellEditEnding="dgPayments_CellEditEnding" 
                               Loaded="dgPayments_Loaded" 
                               LostFocus="dgPayments_LostFocus">
-                    </DataGrid>
-                </Grid>
-            </Grid>
-        </TabItem>
-        <TabItem Name="tiAuctions" Header="Auctions">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="20"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Left">
-                    <ComboBox Name="cbAuctionChits" Width="150" 
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="tiAuctions" Header="Auctions">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="20"></RowDefinition>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row ="0" Grid.Column="0" HorizontalAlignment="Left">
+                            <ComboBox Name="cbAuctionChits" Width="150" 
                               ItemsSource="{Binding AuctionChits}" 
                               SelectedItem="{Binding AuctionSelectedChit}" 
                               DisplayMemberPath="ChitName" 
-                              SelectedValuePath="ChitId">
-                    </ComboBox>
-                    <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
-                </Grid>
-                <Grid Grid.Row ="1" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="103*"/>
-                        <ColumnDefinition Width="297*"/>
-                        <ColumnDefinition Width="402*"/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid Name="dgAuctions" Height="600" Width="800" RowHeight="20" 
+                              SelectedValuePath="ChitId"/>
+                            <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
+                        </Grid>
+                        <Grid Grid.Row ="1" Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="103*"/>
+                                <ColumnDefinition Width="297*"/>
+                                <ColumnDefinition Width="402*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="dgAuctions" Height="600" Width="800" RowHeight="20" 
                               ItemsSource="{Binding Auctions, Mode=TwoWay}" 
                               AutoGenerateColumns="true" 
                               CanUserDeleteRows="False" 
@@ -90,31 +132,31 @@
                               CellEditEnding="dgAuctions_CellEditEnding"
                               Loaded="dgAuctions_Loaded" 
                               >
-                        <!--<DataGrid.Columns>
+                                <!--<DataGrid.Columns>
                             <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="0.5*"/>
                             <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="0.2*" />
                             <DataGridTextColumn Header="Auction Amount" Binding="{Binding AuctionAmount}" Width="0.3*" />
                         </DataGrid.Columns>-->
 
-                    </DataGrid>
-                </Grid>
-            </Grid>
-        </TabItem>
-        <TabItem Name="tiCustomers" Header="Customers">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <Grid Grid.Row ="0" Grid.Column="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="103*"/>
-                        <ColumnDefinition Width="297*"/>
-                        <ColumnDefinition Width="402*"/>
-                    </Grid.ColumnDefinitions>
-                    <DataGrid Name="dgCustomers" Height="600" Width="800" RowHeight="20" 
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+                <TabItem Name="tiCustomers" Header="Customers">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"></RowDefinition>
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row ="0" Grid.Column="0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="103*"/>
+                                <ColumnDefinition Width="297*"/>
+                                <ColumnDefinition Width="402*"/>
+                            </Grid.ColumnDefinitions>
+                            <DataGrid Name="dgCustomers" Height="600" Width="800" RowHeight="20" 
                               ItemsSource="{Binding Customers, Mode=TwoWay}" 
                               AutoGenerateColumns="true" 
                               CanUserResizeRows="False" 
@@ -125,17 +167,20 @@
                               CanUserReorderColumns="False" 
                               CanUserResizeColumns="False" 
                               Loaded="dgCustomers_Loaded" 
+                              LostFocus="dgCustomers_LostFocus" 
+                              RowEditEnding="dgCustomers_RowEditEnding" 
                               >
-                        <!--<DataGrid.Columns>
+                                <!--<DataGrid.Columns>
                             <DataGridTextColumn Header="Customer Name" Binding="{Binding CustomerName}" Width="0.5*"/>
                             <DataGridTextColumn Header="Month" Binding="{Binding Month}" Width="0.2*" />
                             <DataGridTextColumn Header="Auction Amount" Binding="{Binding AuctionAmount}" Width="0.3*" />
                         </DataGrid.Columns>-->
 
-                    </DataGrid>
-                </Grid>
-            </Grid>
-        </TabItem>
-    </TabControl>
-
+                            </DataGrid>
+                        </Grid>
+                    </Grid>
+                </TabItem>
+            </TabControl>
+        </Grid>
+    </Grid>
 </Window>

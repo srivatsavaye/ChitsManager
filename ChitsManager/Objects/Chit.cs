@@ -10,9 +10,12 @@ namespace ChitsManager.Objects
     {
         private int _chitId;
         private string _chitName;
+        private int _premium;
         private int _numberOfMonths;
         private int _numberOfCustomers;
-        private string _monthStarted;
+        private DateTime _startDate;
+        private int _interestGracePeriod;
+        private int _interestOnPremium;
         private int _multiplier;
         private bool _activeFlag;
        
@@ -28,6 +31,12 @@ namespace ChitsManager.Objects
             set { _chitName = value; }
         }
 
+        public int Premium
+        {
+            get { return _premium; }
+            set { _premium = value; }
+        }
+
         public int NumberOfMonths
         {
             get { return _numberOfMonths; }
@@ -40,10 +49,22 @@ namespace ChitsManager.Objects
             set { _numberOfCustomers = value; }
         }
 
-        public string MonthStarted
+        public DateTime StartDate
         {
-            get { return _monthStarted; }
-            set { _monthStarted = value; }
+            get { return _startDate; }
+            set { _startDate = value; }
+        }
+
+        public int InterestGracePeriod
+        {
+            get { return _interestGracePeriod; }
+            set { _interestGracePeriod = value; }
+        }
+
+        public int InterestOnPremium
+        {
+            get { return _interestOnPremium; }
+            set { _interestOnPremium = value; }
         }
 
         public int Multiplier
