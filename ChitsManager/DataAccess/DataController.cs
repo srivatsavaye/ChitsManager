@@ -133,14 +133,19 @@ namespace ChitsManager.DataAccess
             return ret;
         }
 
-        public bool UpdatePaymentByPaymentId(int paymentId, bool paid, string paidDate)
+        public bool UpdatePaymentByPaymentId(int paymentId, bool paid, string amountPaid, string paidDate)
         {
             bool ret = false;
             try
             {
+                int amountPaidInt;
+                int.TryParse(amountPaid, out amountPaidInt);
+                if (String.IsNullOrEmpty(paidDate))
+                    paidDate = DateTime.Now.ToShortDateString();
                 List<SqlParameter> paramList = new List<SqlParameter>();
                 paramList.Add(new SqlParameter("@PaymentId", paymentId));
                 paramList.Add(new SqlParameter("@Paid", paid));
+                paramList.Add(new SqlParameter("@AmountPaid", amountPaidInt));
                 paramList.Add(new SqlParameter("@PaidDate", paidDate));
                 if (!_adoDataAccess.ExecuteNonQuery("sp_UpdatePaymentByPaymentId", paramList))
                     throw new Exception("UpdatePaymentByPaymentId could not run");

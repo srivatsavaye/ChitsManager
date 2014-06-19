@@ -126,6 +126,23 @@ namespace ChitsManager
             return dirtyFlags.Where(b => b == true).Count() > 0 ? true : false;
         }
 
+        private void Reload()
+        {
+            ReloadAuctions();
+            LoadAllPayments();
+            LoadPayments();
+        }
+
+        #endregion
+
+        #region Event Handlers
+
+
+        private void chkAddInterest_Checked(object sender, RoutedEventArgs e)
+        {
+            Reload();
+        }
+
         #endregion
 
         #region Other
@@ -162,7 +179,7 @@ namespace ChitsManager
             DataConversion.UpdatePaymentData(MonthlyPayments);
             DataConversion.UpdatePaymentData(AllPayments);
             DataConversion.UpsertCustomers(Customers);
-            ReloadAuctions();
+            Reload();
             MessageBox.Show("Changes Saved");
         }
         #endregion
@@ -195,7 +212,15 @@ namespace ChitsManager
         {
             if (e.EditingElement.DataContext != null)
             {
+                Payment payment = (ChitsManager.Objects.Payment)e.EditingElement.DataContext;
+                int amountDue = 0;
+                if (payment.AmountDue.Contains('='))
+                {
+                    string amountDueStr = payment.AmountDue.Substring(payment.AmountDue.IndexOf('=') + 1).Trim();
+                    int.TryParse(amountDueStr, out amountDue);
+                }
                 ((ChitsManager.Objects.Payment)e.EditingElement.DataContext).IsDirty = true;
+                ((ChitsManager.Objects.Payment)e.EditingElement.DataContext).AmountPaid = amountDue == 0 ? payment.AmountDue : amountDue.ToString();
             }
         }
 
@@ -210,9 +235,10 @@ namespace ChitsManager
         private const int _allPaymentsMonthColumnNumber = 3;
         private const int _allPaymentsAmountDueColumnNumber = 4;
         private const int _allPaymentsDueDateColumnNumber = 5;
-        private const int _allPaymentsPaidDateColumnNumber = 6;
-        private const int _allPaymentsPaidColumnNumber = 7;
-        private const int _allPaymentsIsDirtyColumnNumber = 8;
+        private const int _allPaymentsAmountPaidColumnNumber = 6;
+        private const int _allPaymentsPaidDateColumnNumber = 7;
+        private const int _allPaymentsPaidColumnNumber = 8;
+        private const int _allPaymentsIsDirtyColumnNumber = 9;
 
 
         #endregion
@@ -221,7 +247,7 @@ namespace ChitsManager
 
         private void dgAllPayments_SetGridColumnProperties()
         {
-            if (dgAllPayments.Columns.Count > 0)
+            if (dgAllPayments != null && dgAllPayments.Columns.Count > 0)
             {
                 dgAllPayments.Columns[_allPaymentsPaymentIdColumnNumber].Visibility = Visibility.Hidden;
                 //dgAllPayments.Columns[_allPaymentsChitNameColumnNumber].Visibility = Visibility.Hidden;
@@ -240,8 +266,9 @@ namespace ChitsManager
                 dgAllPayments.Columns[_allPaymentsPaidColumnNumber].Width = gridWidth * 0.1;
                 dgAllPayments.Columns[_allPaymentsMonthColumnNumber].Width = gridWidth * 0.1;
                 dgAllPayments.Columns[_allPaymentsAmountDueColumnNumber].Width = gridWidth * 0.2;
-                dgAllPayments.Columns[_allPaymentsDueDateColumnNumber].Width = gridWidth * 0.15;
-                dgAllPayments.Columns[_allPaymentsPaidDateColumnNumber].Width = gridWidth * 0.15;
+                dgAllPayments.Columns[_allPaymentsDueDateColumnNumber].Width = gridWidth * 0.1;
+                dgAllPayments.Columns[_allPaymentsPaidDateColumnNumber].Width = gridWidth * 0.1;
+                dgAllPayments.Columns[_allPaymentsAmountPaidColumnNumber].Width = gridWidth * 0.1;
             }
         }
 
@@ -251,6 +278,10 @@ namespace ChitsManager
         private void LoadAllPayments()
         {
             _allPayments = DataConversion.ConvertAllPaymentData();
+
+            OnPropertyChanged("AllPayments");
+
+            dgAllPayments_Loaded(new object(), new RoutedEventArgs());
         }
 
         #endregion
@@ -271,10 +302,15 @@ namespace ChitsManager
         {
             get
             {
-                if (PaymentChits.Count > 0)
-                    return DataConversion.ConvertPaymentData(PaymentSelectedChit.ChitId);
-                else
-                    return new List<Payment>();
+                return _payments;
+                //if (PaymentChits.Count > 0)
+                //    return DataConversion.ConvertPaymentData(PaymentSelectedChit.ChitId);
+                //else
+                //    return new List<Payment>();
+            }
+            set
+            {
+                _payments = value;
             }
         }
 
@@ -338,10 +374,15 @@ namespace ChitsManager
 
         private void dgPayments_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.EditingElement.DataContext != null)
+            Payment payment = (ChitsManager.Objects.Payment)e.EditingElement.DataContext;
+            int amountDue = 0;
+            if (payment.AmountDue.Contains('='))
             {
-                ((ChitsManager.Objects.Payment)e.EditingElement.DataContext).IsDirty = true;
+                string amountDueStr = payment.AmountDue.Substring(payment.AmountDue.IndexOf('=') + 1).Trim();
+                int.TryParse(amountDueStr, out amountDue);
             }
+            ((ChitsManager.Objects.Payment)e.EditingElement.DataContext).IsDirty = true;
+            ((ChitsManager.Objects.Payment)e.EditingElement.DataContext).AmountPaid = amountDue == 0 ? payment.AmountDue : amountDue.ToString();
         }
 
         private void dgPayments_Loaded(object sender, RoutedEventArgs e)
@@ -365,8 +406,9 @@ namespace ChitsManager
         private const int _paymentAmountDueColumnNumber = 4;
         private const int _paymentDueDateColumnNumber = 5;
         private const int _paymentPaidDateColumnNumber = 6;
-        private const int _paymentPaidColumnNumber = 7;
-        private const int _paymentIsDirtyColumnNumber = 8;
+        private const int _paymentAmountPaidColumnNumber = 7;
+        private const int _paymentPaidColumnNumber = 8;
+        private const int _paymentIsDirtyColumnNumber = 9;
 
 
         #endregion
@@ -375,7 +417,7 @@ namespace ChitsManager
 
         private void dgPayments_SetGridColumnProperties()
         {
-            if (dgPayments.Columns.Count > 0)
+            if (dgPayments != null && dgPayments.Columns.Count > 0)
             {
                 dgPayments.Columns[_paymentPaymentIdColumnNumber].Visibility = Visibility.Hidden;
                 dgPayments.Columns[_paymentChitNameColumnNumber].Visibility = Visibility.Hidden;
@@ -384,13 +426,14 @@ namespace ChitsManager
                 dgPayments.Columns[_paymentAmountDueColumnNumber].IsReadOnly = true;
                 dgPayments.Columns[_paymentDueDateColumnNumber].IsReadOnly = true;
                 dgPayments.Columns[_paymentCustomerNameColumnNumber].IsReadOnly = true;
-               // dgPayments.Columns[_paymentPaidDateColumnNumber].IsReadOnly = true;
+                // dgPayments.Columns[_paymentPaidDateColumnNumber].IsReadOnly = true;
                 double gridWidth = dgPayments.Width - 8;
 
-                dgPayments.Columns[_paymentCustomerNameColumnNumber].Width = gridWidth * 0.45;
+                dgPayments.Columns[_paymentCustomerNameColumnNumber].Width = gridWidth * 0.3;
                 dgPayments.Columns[_paymentPaidColumnNumber].Width = gridWidth * 0.1;
                 dgPayments.Columns[_paymentAmountDueColumnNumber].Width = gridWidth * 0.15;
                 dgPayments.Columns[_paymentDueDateColumnNumber].Width = gridWidth * 0.15;
+                dgPayments.Columns[_paymentAmountPaidColumnNumber].Width = gridWidth * 0.15;
                 dgPayments.Columns[_paymentPaidDateColumnNumber].Width = gridWidth * 0.15;
             }
         }
@@ -404,14 +447,17 @@ namespace ChitsManager
             if (PaymentChits.Count > 0)
             {
                 _paymentSelectedChit = PaymentChits[0];
-                _payments = DataConversion.ConvertPaymentData(PaymentSelectedChit.ChitId);
+                Payments = DataConversion.ConvertPaymentData(PaymentSelectedChit.ChitId);
                 if (Months.Count > 0)
                 {
-                    _selectedMonth = Months[0];
-                    _monthlyPayments = Payments.Where(p => p.Month == SelectedMonth).ToList();
+                    if (SelectedMonth == 0)
+                        SelectedMonth = Months[0];
+                    MonthlyPayments = Payments.Where(p => p.Month == SelectedMonth).ToList();
                 }
                 //if (Months.Count > 0)
                 //    _selectedMonth = Months[0];
+                OnPropertyChanged("MonthlyPayments");
+                dgPayments_Loaded(new object(), new RoutedEventArgs());
             }
         }
 
@@ -489,9 +535,9 @@ namespace ChitsManager
 
         private void dgAuctions_LostFocus(object sender, RoutedEventArgs e)
         {
-            Control ctrl = FocusManager.GetFocusedElement(this) as Control;
-            if (ctrl.Parent != null && ctrl.Parent.GetType() != typeof(DataGridCell))
-                DataConversion.UpdateAuctionData(Auctions);
+            //Control ctrl = FocusManager.GetFocusedElement(this) as Control;
+            //if (ctrl.Parent != null && ctrl.Parent.GetType() != typeof(DataGridCell))
+            //    DataConversion.UpdateAuctionData(Auctions);
 
             //if (IsListDirty(Auctions.Select(a => a.IsDirty).ToList()))
         }
@@ -512,42 +558,49 @@ namespace ChitsManager
                 tb = (TextBox)e.EditingElement;
             }
 
-            switch (e.Column.DisplayIndex)
+            if (!IsNumber(((TextBox)e.EditingElement).Text))
             {
-                case _auctionMonthColumnNumber:
-                    string number = tb.Text;
-                    if (!NumberInRange(number, 1, _auctionSelectedChit.NumberOfMonths, Auctions.Where(i => i.Month != 0).Select(a => a.Month).ToList()))
-                    {
-                        tb.Text = "0";
-                        e.EditingElement.Focus();
-                        e.Cancel = true;
-                        //dgAuctions.CurrentCell = new DataGridCellInfo(dgAuctions.Items[e.Row.AlternationIndex], dgAuctions.Columns[e.Column.DisplayIndex]);
-                        //dgAuctions.BeginEdit();
-                        return;
-                    }
-                    //else
-                    //{
-
-                    //}
-                    break;
-                case _auctionAmountColumnNumber:
-                    if (!IsNumber(((TextBox)e.EditingElement).Text))
-                    {
-                        tb.Text = "0";
-                        e.EditingElement.Focus();
-                        e.Cancel = true;
-                    }
-                    //else
-                    //{
-                    //    //int nextMonth = GetNextMonth();
-                    //    //((ChitsManager.Objects.Auction)e.EditingElement.DataContext).Month = nextMonth;
-                    //    //((Auction)dgAuctions.Items[e.Row.AlternationIndex]).Month = nextMonth;
-                    //    //Auctions[e.Row.AlternationIndex].Month = GetNextMonth();
-                    //    //dgAuctions.Items.Refresh();
-                    //    OnPropertyChanged("Auctions");
-                    //}
-                    break;
+                tb.Text = "0";
+                e.EditingElement.Focus();
+                e.Cancel = true;
             }
+
+            //switch (e.Column.DisplayIndex)
+            //{
+            //    case _auctionMonthColumnNumber:
+            //        string number = tb.Text;
+            //        if (!NumberInRange(number, 1, _auctionSelectedChit.NumberOfMonths, Auctions.Where(i => i.Month != 0).Select(a => a.Month).ToList()))
+            //        {
+            //            tb.Text = "0";
+            //            e.EditingElement.Focus();
+            //            e.Cancel = true;
+            //            //dgAuctions.CurrentCell = new DataGridCellInfo(dgAuctions.Items[e.Row.AlternationIndex], dgAuctions.Columns[e.Column.DisplayIndex]);
+            //            //dgAuctions.BeginEdit();
+            //            return;
+            //        }
+            //        //else
+            //        //{
+
+            //        //}
+            //        break;
+            //    case _auctionAmountColumnNumber:
+            //        if (!IsNumber(((TextBox)e.EditingElement).Text))
+            //        {
+            //            tb.Text = "0";
+            //            e.EditingElement.Focus();
+            //            e.Cancel = true;
+            //        }
+            //        //else
+            //        //{
+            //        //    //int nextMonth = GetNextMonth();
+            //        //    //((ChitsManager.Objects.Auction)e.EditingElement.DataContext).Month = nextMonth;
+            //        //    //((Auction)dgAuctions.Items[e.Row.AlternationIndex]).Month = nextMonth;
+            //        //    //Auctions[e.Row.AlternationIndex].Month = GetNextMonth();
+            //        //    //dgAuctions.Items.Refresh();
+            //        //    OnPropertyChanged("Auctions");
+            //        //}
+            //        break;
+            //}
         }
 
         #endregion Event Handlers
@@ -648,7 +701,7 @@ namespace ChitsManager
 
         private void dgCustomers_SetGridColumnProperties()
         {
-            if (dgCustomers.Columns.Count > 0)
+            if (dgCustomers != null && dgCustomers.Columns.Count > 0)
             {
                 dgCustomers.Columns[_customerCustomerIdColumnNumber].Visibility = Visibility.Hidden;
                 dgCustomers.Columns[_customerIsDirtyColumnNumber].Visibility = Visibility.Hidden;
@@ -673,27 +726,32 @@ namespace ChitsManager
             dgCustomers_SetGridColumnProperties();
         }
 
-        private void dgCustomers_RowEditEnding(object sender, DataGridRowEditEndingEventArgs e)
+        private void dgCustomers_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
         {
-            if (e.Row.DataContext != null)
+            if (e.EditingElement.DataContext != null)
             {
-                ((ChitsManager.Objects.Customer)e.Row.DataContext).IsDirty = true;
+                ((ChitsManager.Objects.Customer)e.EditingElement.DataContext).IsDirty = true;
             }
-        }
 
+        }
         private void dgCustomers_LostFocus(object sender, RoutedEventArgs e)
         {
-            Control ctrl = FocusManager.GetFocusedElement(this) as Control;
-            if (ctrl.Parent != null && ctrl.Parent.GetType() != typeof(DataGridCell))
-            {
-                DataConversion.UpsertCustomers(Customers);
-                _customers = DataConversion.ConvertCustomerData(0);
-            }
+            //Control ctrl = FocusManager.GetFocusedElement(this) as Control;
+            //if (ctrl.Parent != null && ctrl.Parent.GetType() != typeof(DataGridCell))
+            //{
+            //    DataConversion.UpsertCustomers(Customers);
+            //    _customers = DataConversion.ConvertCustomerData(0);
+            //}
         }
 
         #endregion
 
-        
+        private void chkAddInterest_Unchecked(object sender, RoutedEventArgs e)
+        {
+            Reload();
+        }
+
+
         #endregion
 
 

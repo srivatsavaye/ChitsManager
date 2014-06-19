@@ -140,7 +140,7 @@ namespace ChitsManager.DataAccess
         {
             foreach (Payment payment in listPayments.Where(a => a.IsDirty == true).ToList())
             {
-                _dataController.UpdatePaymentByPaymentId(payment.PaymentId, payment.Paid, payment.PaidDate);
+                _dataController.UpdatePaymentByPaymentId(payment.PaymentId, payment.Paid, payment.AmountPaid, payment.PaidDate);
             }
         }
 
@@ -159,19 +159,20 @@ namespace ChitsManager.DataAccess
                         int paymentId;
                         int month;
                         int amountDue;
+                        int amountPaid;
                         bool paid;
                         int.TryParse(dr["PaymentId"].ToString(), out paymentId);
                         int.TryParse(dr["Month"].ToString(), out month);
                         int.TryParse(dr["AmountDue"].ToString(), out amountDue);
+                        int.TryParse(dr["AmountPaid"].ToString(), out amountPaid);
                         bool.TryParse(dr["Paid"].ToString(), out paid);
-
-                        
 
                         Payment payment = new Payment();
                         payment.PaymentId = paymentId;
                         payment.Month = month;
                         payment.AmountDue = GetAmountDue(chitId, month, amountDue, paid, dr["PaidDate"].ToString());
                         payment.DueDate = dr["DueDate"].ToString();
+                        payment.AmountPaid = amountPaid.ToString();
                         payment.PaidDate = dr["PaidDate"].ToString();
                         payment.CustomerName = dr["CustomerName"].ToString();
                         payment.Paid = paid;
@@ -196,11 +197,13 @@ namespace ChitsManager.DataAccess
                         int paymentId;
                         int month;
                         int amountDue;
+                        int amountPaid;
                         bool paid;
                         int chitId;
                         int.TryParse(dr["PaymentId"].ToString(), out paymentId);
                         int.TryParse(dr["Month"].ToString(), out month);
                         int.TryParse(dr["AmountDue"].ToString(), out amountDue);
+                        int.TryParse(dr["AmountPaid"].ToString(), out amountPaid);
                         int.TryParse(dr["ChitId"].ToString(), out chitId);
                         bool.TryParse(dr["Paid"].ToString(), out paid);
 
@@ -209,6 +212,7 @@ namespace ChitsManager.DataAccess
                         payment.Month = month;
                         payment.AmountDue = GetAmountDue(chitId, month, amountDue, paid, dr["PaidDate"].ToString());
                         payment.DueDate = dr["DueDate"].ToString();
+                        payment.AmountPaid = amountPaid.ToString();
                         payment.PaidDate = dr["PaidDate"].ToString();
                         payment.CustomerName = dr["CustomerName"].ToString();
                         payment.ChitName = dr["ChitName"].ToString();
@@ -337,7 +341,10 @@ namespace ChitsManager.DataAccess
                     double interestAmount = GetInterestAmount(chitId, amountDue);
                     int interestAmountAsInt = int.Parse(Math.Round(interestAmount, 0).ToString());
 
-                    ret = string.Format("{0} + {1} = {2}", amountDue, interestAmountAsInt, amountDue + interestAmountAsInt);
+                    if (interestAmountAsInt == 0)
+                        ret = amountDue.ToString();
+                    else
+                        ret = string.Format("{0} + {1} = {2}", amountDue, interestAmountAsInt, amountDue + interestAmountAsInt);
                 }
             }
 

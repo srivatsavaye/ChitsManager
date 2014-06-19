@@ -14,6 +14,7 @@ namespace ChitsManager.Objects
         private string _chitName;
         private string _amountDue;
         private string _dueDate;
+        private string _amountPaid;
         private string _paidDate;
         private bool _paid;
         private bool _isDirty;
@@ -52,6 +53,12 @@ namespace ChitsManager.Objects
         {
             get { return _dueDate; }
             set { _dueDate = value; }
+        }
+
+        public string AmountPaid
+        {
+            get { return _amountPaid; }
+            set { _amountPaid = value; }
         }
 
         public string PaidDate
