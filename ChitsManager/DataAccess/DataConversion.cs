@@ -41,6 +41,7 @@ namespace ChitsManager.DataAccess
                             int auctionAmount;
                             int premiumAmount;
                             int bonusAmount;
+                            int sortOrder;
                             bool isDirty = false;
                             string dueDate;
                             int.TryParse(dr["AuctionId"].ToString(), out auctionId);
@@ -49,6 +50,7 @@ namespace ChitsManager.DataAccess
                             int.TryParse(dr["AuctionAmount"].ToString(), out auctionAmount);
                             int.TryParse(dr["PremiumAmount"].ToString(), out premiumAmount);
                             int.TryParse(dr["BonusAmount"].ToString(), out bonusAmount);
+                            int.TryParse(dr["SortOrder"].ToString(), out sortOrder);
                             dueDate = dr["DueDate"].ToString();
 
                             if (premiumAmount == 0 && (month != 0 || auctionAmount != 0))
@@ -64,6 +66,7 @@ namespace ChitsManager.DataAccess
                             auction.Customerid = customerId;
                             auction.CustomerName = dr["CustomerName"].ToString();
                             auction.Month = month;
+                            auction.SortOrder = sortOrder;
                             auction.AuctionAmount = auctionAmount;
                             auction.PremiumAmount = premiumAmount;
                             auction.BonusAmount = bonusAmount;
@@ -304,7 +307,7 @@ namespace ChitsManager.DataAccess
             DateTime ret;
             Chit chit = _chits.Where(c => c.ChitId == chitId).FirstOrDefault();
 
-            ret = chit.StartDate.AddMonths(currentMonth).AddDays(chit.InterestGracePeriod);
+            ret = chit.StartDate.AddMonths(currentMonth + 1).AddDays(-1);
 
             return ret;
         }

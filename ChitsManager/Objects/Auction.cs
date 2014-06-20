@@ -11,6 +11,7 @@ namespace ChitsManager.Objects
         private int _auctionId;
         //private int _chitId;
         //private string _chitName;
+        private int _sortOrder;
         private int _customerid;
         private string _customerName;
         private int _month;
@@ -42,6 +43,12 @@ namespace ChitsManager.Objects
         {
             get { return _customerid; }
             set { _customerid = value; }
+        }
+
+        public int SortOrder
+        {
+            get { return _sortOrder; }
+            set { _sortOrder = value; }
         }
 
         public string CustomerName

@@ -473,13 +473,14 @@ namespace ChitsManager
 
         private const int _auctionAuctionIdColumnNumber = 0;
         private const int _auctionCustomeridColumnNumber = 1;
-        private const int _auctionCustomerNameColumnNumber = 2;
-        private const int _auctionMonthColumnNumber = 3;
-        private const int _auctionAmountColumnNumber = 4;
-        private const int _auctionPremiumAmountColumnNumber = 5;
-        private const int _auctionBonusAmountColumnNumber = 6;
-        private const int _auctionDueDateColumnNumber = 7;
-        private const int _auctionIsDirtyColumnNumber = 8;
+        private const int _auctionSortOrderColumnNumber = 2;
+        private const int _auctionCustomerNameColumnNumber = 3;
+        private const int _auctionMonthColumnNumber = 4;
+        private const int _auctionAmountColumnNumber = 5;
+        private const int _auctionPremiumAmountColumnNumber = 6;
+        private const int _auctionBonusAmountColumnNumber = 7;
+        private const int _auctionDueDateColumnNumber = 8;
+        private const int _auctionIsDirtyColumnNumber = 9;
 
 
         #endregion
@@ -618,6 +619,7 @@ namespace ChitsManager
                 dgAuctions.Columns[_auctionPremiumAmountColumnNumber].IsReadOnly = true;
                 dgAuctions.Columns[_auctionBonusAmountColumnNumber].IsReadOnly = true;
                 dgAuctions.Columns[_auctionDueDateColumnNumber].IsReadOnly = true;
+                dgAuctions.Columns[_auctionSortOrderColumnNumber].IsReadOnly = true;
                 //dgAuctions.Columns[_monthColumnNumber].IsReadOnly = true;
                 double gridWidth = dgAuctions.Width - 8;
 
@@ -753,6 +755,15 @@ namespace ChitsManager
 
 
         #endregion
+
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            //Reports.ReportViewerForm f = new Reports.ReportViewerForm();
+            //f.Show();
+
+            Reports.WPFReportViewer w = new Reports.WPFReportViewer(_auctionSelectedChit.ChitId);
+            w.Show();
+        }
 
 
 

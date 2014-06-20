@@ -113,7 +113,7 @@
                               SelectedItem="{Binding AuctionSelectedChit}" 
                               DisplayMemberPath="ChitName" 
                               SelectedValuePath="ChitId"/>
-                            <!--<Button Name="btnSave" Width="100" Content="Save" Margin="180,0,-130,0"></Button>-->
+                            <Button Name="btnPrint" Width="100" Content="Print" Margin="180,0,-130,0" Click="btnPrint_Click"></Button>
                         </Grid>
                         <Grid Grid.Row ="1" Grid.Column="0">
                             <Grid.ColumnDefinitions>

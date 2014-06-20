@@ -224,7 +224,7 @@ namespace ChitsManager.DataAccess
                 paramList.Add(new SqlParameter("@Address", customer.Address));
                 paramList.Add(new SqlParameter("@City", customer.City));
                 paramList.Add(new SqlParameter("@HomePhone", customer.HomePhone));
-                paramList.Add(new SqlParameter("@CellPhone", customer.CellPhone));                
+                paramList.Add(new SqlParameter("@CellPhone", customer.CellPhone));
 
                 if (!_adoDataAccess.ExecuteNonQuery("sp_InsertCustomer", paramList))
                     throw new Exception("UpdateCustomer could not run");
