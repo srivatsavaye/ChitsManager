@@ -108,7 +108,7 @@ namespace ChitsManager.DataAccess
             return ds;
         }
 
-        public bool UpdateAuctionByAuctionId(int auctionId, int month, int auctionAmount, int premiumAmount, int bonusAmount, string dueDate)
+        public bool UpdateAuctionByAuctionId(int auctionId, int month, int auctionAmount, int premiumAmount, int bonusAmount, string dueDate, string customerNote)
         {
             bool ret = false;
             try
@@ -120,6 +120,7 @@ namespace ChitsManager.DataAccess
                 paramList.Add(new SqlParameter("@PremiumAmount", premiumAmount));
                 paramList.Add(new SqlParameter("@BonusAmount", bonusAmount));
                 paramList.Add(new SqlParameter("@DueDate", dueDate));
+                paramList.Add(new SqlParameter("@CustomerNote", customerNote));
                 if (!_adoDataAccess.ExecuteNonQuery("sp_UpdateAuctionByAuctionId", paramList))
                     throw new Exception("UpdateAuctionByAuctionId could not run");
                 else

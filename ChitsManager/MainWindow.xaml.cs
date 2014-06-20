@@ -96,11 +96,6 @@ namespace ChitsManager
                 {
                     numberRange = NumberRange.ALREADYEXISTS;
                 }
-                //}
-                //else
-                //{
-                //    return true;
-                //}
             }
             else
             {
@@ -111,12 +106,6 @@ namespace ChitsManager
                 MessageBox.Show(string.Format(_warningDictionary[_webTextOutOfRange], minNumber, maxNumber, string.Join(",", existingNumbers.Select(n => n.ToString()).ToArray())));
             else
                 ret = true;
-
-            //switch(ret)
-            //{
-            //    case NumberRange.LESSTHANMINIMUM;
-            //        message = 
-            //}
 
             return ret;
         }
@@ -480,7 +469,8 @@ namespace ChitsManager
         private const int _auctionPremiumAmountColumnNumber = 6;
         private const int _auctionBonusAmountColumnNumber = 7;
         private const int _auctionDueDateColumnNumber = 8;
-        private const int _auctionIsDirtyColumnNumber = 9;
+        private const int _auctionCustomerNoteColumnNumber = 9;
+        private const int _auctionIsDirtyColumnNumber = 10;
 
 
         #endregion
@@ -559,51 +549,58 @@ namespace ChitsManager
                 tb = (TextBox)e.EditingElement;
             }
 
-            if (!IsNumber(((TextBox)e.EditingElement).Text))
+            
+
+            switch (e.Column.DisplayIndex)
             {
-                tb.Text = "0";
-                e.EditingElement.Focus();
-                e.Cancel = true;
+                case _auctionMonthColumnNumber:
+                    
+                    if (!IsNumber(((TextBox)e.EditingElement).Text))
+                    {
+                        tb.Text = "0";
+                        e.EditingElement.Focus();
+                        e.Cancel = true;
+                    }
+                    //string number = tb.Text;
+                    //if (!NumberInRange(number, 1, _auctionSelectedChit.NumberOfMonths, Auctions.Where(i => i.Month != 0).Select(a => a.Month).ToList()))
+                    //{
+                    //    tb.Text = "0";
+                    //    e.EditingElement.Focus();
+                    //    e.Cancel = true;
+                    //    //dgAuctions.CurrentCell = new DataGridCellInfo(dgAuctions.Items[e.Row.AlternationIndex], dgAuctions.Columns[e.Column.DisplayIndex]);
+                    //    //dgAuctions.BeginEdit();
+                    //    return;
+                    //}
+                    //else
+                    //{
+
+                    //}
+                    break;
+                case _auctionAmountColumnNumber:
+                    if (!IsNumber(((TextBox)e.EditingElement).Text))
+                    {
+                        tb.Text = "0";
+                        e.EditingElement.Focus();
+                        e.Cancel = true;
+                    }
+                    //else
+                    //{
+                    //    //int nextMonth = GetNextMonth();
+                    //    //((ChitsManager.Objects.Auction)e.EditingElement.DataContext).Month = nextMonth;
+                    //    //((Auction)dgAuctions.Items[e.Row.AlternationIndex]).Month = nextMonth;
+                    //    //Auctions[e.Row.AlternationIndex].Month = GetNextMonth();
+                    //    //dgAuctions.Items.Refresh();
+                    //    OnPropertyChanged("Auctions");
+                    //}
+                    break;
             }
-
-            //switch (e.Column.DisplayIndex)
-            //{
-            //    case _auctionMonthColumnNumber:
-            //        string number = tb.Text;
-            //        if (!NumberInRange(number, 1, _auctionSelectedChit.NumberOfMonths, Auctions.Where(i => i.Month != 0).Select(a => a.Month).ToList()))
-            //        {
-            //            tb.Text = "0";
-            //            e.EditingElement.Focus();
-            //            e.Cancel = true;
-            //            //dgAuctions.CurrentCell = new DataGridCellInfo(dgAuctions.Items[e.Row.AlternationIndex], dgAuctions.Columns[e.Column.DisplayIndex]);
-            //            //dgAuctions.BeginEdit();
-            //            return;
-            //        }
-            //        //else
-            //        //{
-
-            //        //}
-            //        break;
-            //    case _auctionAmountColumnNumber:
-            //        if (!IsNumber(((TextBox)e.EditingElement).Text))
-            //        {
-            //            tb.Text = "0";
-            //            e.EditingElement.Focus();
-            //            e.Cancel = true;
-            //        }
-            //        //else
-            //        //{
-            //        //    //int nextMonth = GetNextMonth();
-            //        //    //((ChitsManager.Objects.Auction)e.EditingElement.DataContext).Month = nextMonth;
-            //        //    //((Auction)dgAuctions.Items[e.Row.AlternationIndex]).Month = nextMonth;
-            //        //    //Auctions[e.Row.AlternationIndex].Month = GetNextMonth();
-            //        //    //dgAuctions.Items.Refresh();
-            //        //    OnPropertyChanged("Auctions");
-            //        //}
-            //        break;
-            //}
         }
-
+        
+        private void btnPrint_Click(object sender, RoutedEventArgs e)
+        {
+            Reports.WPFReportViewer w = new Reports.WPFReportViewer(_auctionSelectedChit.ChitId);
+            w.Show();
+        }
         #endregion Event Handlers
 
         #region Appearance
@@ -753,20 +750,6 @@ namespace ChitsManager
             Reload();
         }
 
-
         #endregion
-
-        private void btnPrint_Click(object sender, RoutedEventArgs e)
-        {
-            //Reports.ReportViewerForm f = new Reports.ReportViewerForm();
-            //f.Show();
-
-            Reports.WPFReportViewer w = new Reports.WPFReportViewer(_auctionSelectedChit.ChitId);
-            w.Show();
-        }
-
-
-
-
     }
 }

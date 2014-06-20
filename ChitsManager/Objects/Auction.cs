@@ -19,6 +19,7 @@ namespace ChitsManager.Objects
         private int _premiumAmount;
         private int _bonusAmount;
         private string _dueDate;
+        private string _customerNote;
         private bool _isDirty;
 
         public int AuctionId
@@ -85,6 +86,12 @@ namespace ChitsManager.Objects
         {
             get { return _dueDate; }
             set { _dueDate = value; }
+        }
+
+        public string CustomerNote
+        {
+            get { return _customerNote; }
+            set { _customerNote = value; }
         }
 
         public bool IsDirty
